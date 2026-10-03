@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>مكتب الشكاوى | سموث</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Reem+Kufi:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --mist:#F4F0F6; --paper:#FFFFFF; --ink:#22182A; --muted:#7A6E82; --line:#E6DEEA;
+  --plum:#5E2A55; --plum-2:#7C3C70; --rose:#D9587A; --rose-soft:#FBE7ED;
+  --s-new:#3D6FD6; --s-ops:#C98A12; --s-info:#B4471F; --s-dec:#1E8C7A; --s-closed:#8B8394;
+  --r-lg:22px; --r-md:14px; --r-sm:9px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"IBM Plex Sans Arabic",sans-serif;background:var(--mist);color:var(--ink);font-size:15px;line-height:1.6;min-height:100vh}
+h1,h2,h3,.brand{font-family:"Reem Kufi",sans-serif;font-weight:700;line-height:1.25}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer;border:0;background:none}
+:focus-visible{outline:2px solid var(--rose);outline-offset:2px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* ---------- login ---------- */
+.login{min-height:100vh;display:grid;place-items:center;padding:24px;background:
+  radial-gradient(900px 500px at 85% -10%,#E9D3E4 0,transparent 60%),var(--mist)}
+.login-card{width:100%;max-width:420px;background:var(--paper);border-radius:28px;padding:34px 28px;border:1px solid var(--line)}
+.login-card .brand{font-size:30px;color:var(--plum)}
+.login-card p.sub{color:var(--muted);margin:4px 0 26px}
+.who{display:grid;gap:8px;margin-bottom:18px;max-height:290px;overflow:auto}
+.who button{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:var(--r-md);border:1px solid var(--line);text-align:right}
+.who button[aria-pressed="true"]{border-color:var(--plum);background:#F7EEF5}
+.who small{display:block;color:var(--muted);font-size:12px}
+
+/* ---------- shell ---------- */
+.shell{display:grid;grid-template-columns:250px 1fr;min-height:100vh}
+.side{background:var(--ink);color:#EDE6F0;padding:24px 16px;display:flex;flex-direction:column;gap:6px;position:sticky;top:0;height:100vh}
+.side .brand{font-size:24px;color:#fff;padding:0 10px 2px}
+.side .brand-sub{font-size:12px;color:#A99BB2;padding:0 10px 22px}
+.nav-btn{display:flex;align-items:center;gap:10px;padding:11px 12px;border-radius:12px;color:#CFC3D6;text-align:right;width:100%}
+.nav-btn:hover{background:#2F2338}
+.nav-btn[aria-current="page"]{background:var(--plum);color:#fff}
+.nav-btn svg{width:19px;height:19px;flex:none}
+.nav-btn .count{margin-inline-start:auto;background:var(--rose);color:#fff;font-size:11px;border-radius:20px;padding:0 7px}
+.me{margin-top:auto;border-top:1px solid #3A2E43;padding:14px 10px 0;display:flex;align-items:center;gap:10px}
+.me small{display:block;color:#A99BB2;font-size:12px}
+.me button{margin-inline-start:auto;color:#A99BB2;font-size:13px}
+main{padding:28px clamp(16px,3vw,40px) 90px;min-width:0}
+.top{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:24px;flex-wrap:wrap}
+.top h1{font-size:30px}
+.top p{color:var(--muted)}
+
+/* ---------- atoms ---------- */
+.btn{display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border-radius:40px;font-weight:600;font-size:14px;transition:background .15s}
+.btn-primary{background:var(--plum);color:#fff}.btn-primary:hover{background:var(--plum-2)}
+.btn-rose{background:var(--rose);color:#fff}
+.btn-ghost{border:1px solid var(--line);background:var(--paper)}
+.btn-ghost:hover{border-color:var(--plum)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.avatar{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;font-weight:700;font-size:14px;color:#fff;flex:none}
+.chip{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;padding:3px 10px;border-radius:20px;white-space:nowrap}
+.chip i{width:7px;height:7px;border-radius:50%;background:currentColor}
+.late{background:#FDE4DE;color:#B4361A}
+.prio-عاجلة{background:#FDE4DE;color:#B4361A}.prio-عادية{background:#EEE9F1;color:#5D5266}.prio-مهمة{background:#FFF1D6;color:#9A6608}
+.field{display:grid;gap:6px;margin-bottom:14px}
+.field label{font-size:13px;font-weight:600;color:#4A3F52}
+.field input,.field select,.field textarea{width:100%;border:1px solid var(--line);border-radius:var(--r-sm);padding:10px 12px;background:#FCFAFD}
+.field textarea{min-height:90px;resize:vertical}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--plum);outline:none;background:#fff}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.err{color:#B4361A;font-size:13px;margin:-6px 0 12px}
+.empty{padding:40px 20px;text-align:center;color:var(--muted);border:1.5px dashed var(--line);border-radius:var(--r-md)}
+
+/* ---------- pipeline rail (signature) ---------- */
+.rail{background:var(--paper);border-radius:var(--r-lg);border:1px solid var(--line);padding:22px;margin-bottom:22px}
+.rail h2{font-size:18px;margin-bottom:16px}
+.rail-track{display:grid;grid-template-columns:repeat(5,1fr);position:relative}
+.rail-track::before{content:"";position:absolute;top:27px;inset-inline:10%;height:3px;background:linear-gradient(90deg,var(--s-closed),var(--s-dec),var(--s-info),var(--s-ops),var(--s-new));border-radius:3px}
+.stop{display:flex;flex-direction:column;align-items:center;text-align:center;gap:6px;position:relative;padding:0 4px}
+.stop .dot{width:56px;height:56px;border-radius:50%;display:grid;place-items:center;font-family:"Reem Kufi";font-size:22px;color:#fff;border:5px solid var(--paper)}
+.stop b{font-size:14px}
+.stop small{color:var(--muted);font-size:12px;line-height:1.4}
+.stop button{all:unset;cursor:pointer;display:contents}
+
+/* ---------- dashboard ---------- */
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:22px}
+.kpi{background:var(--paper);border:1px solid var(--line);border-radius:var(--r-md);padding:16px 18px}
+.kpi span{color:var(--muted);font-size:13px}
+.kpi strong{display:block;font-family:"Reem Kufi";font-size:30px;line-height:1.2;margin-top:4px}
+.kpi.warn strong{color:#B4361A}
+.grid2{display:grid;grid-template-columns:1.2fr 1fr;gap:18px}
+.panel{background:var(--paper);border:1px solid var(--line);border-radius:var(--r-lg);padding:20px}
+.panel h2{font-size:17px;margin-bottom:14px}
+.bars{display:grid;gap:11px}
+.bar-row{display:grid;grid-template-columns:120px 1fr 30px;align-items:center;gap:10px;font-size:13px}
+.bar{height:10px;background:#F1ECF3;border-radius:10px;overflow:hidden}
+.bar>div{height:100%;background:var(--plum);border-radius:10px}
+.load-row{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid #F1ECF3}
+.load-row:last-child{border:0}
+.load-row small{color:var(--muted);display:block;font-size:12px}
+.load-row .n{margin-inline-start:auto;font-weight:700}
+
+/* ---------- board ---------- */
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px}
+.toolbar input,.toolbar select{border:1px solid var(--line);border-radius:40px;padding:9px 16px;background:var(--paper)}
+.toolbar input{flex:1;min-width:200px}
+.board{display:grid;grid-template-columns:repeat(5,minmax(230px,1fr));gap:14px;overflow-x:auto;padding-bottom:8px}
+.lane{background:#EBE5EE;border-radius:var(--r-lg);padding:12px;min-height:200px}
+.lane-head{display:flex;align-items:center;gap:8px;padding:4px 6px 12px;font-weight:700;font-size:14px}
+.lane-head .n{margin-inline-start:auto;background:var(--paper);border-radius:20px;padding:0 9px;font-size:12px}
+.lane-head .sw{width:10px;height:10px;border-radius:3px}
+.card{display:block;width:100%;text-align:right;background:var(--paper);border-radius:var(--r-md);padding:13px;margin-bottom:10px;border:1px solid transparent;border-inline-start:4px solid var(--c)}
+.card:hover{border-color:var(--line);border-inline-start-color:var(--c)}
+.card .id{font-size:12px;color:var(--muted)}
+.card h3{font-family:"IBM Plex Sans Arabic";font-size:15px;font-weight:600;margin:2px 0 8px}
+.card .meta{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.card .foot{display:flex;align-items:center;justify-content:space-between;margin-top:10px;font-size:12px;color:var(--muted)}
+.mini{width:24px;height:24px;font-size:11px}
+
+/* ---------- drawer & modal ---------- */
+.scrim{position:fixed;inset:0;background:rgba(34,24,42,.45);z-index:20;display:flex;justify-content:flex-start}
+.drawer{width:min(620px,100%);height:100%;background:var(--mist);overflow:auto;animation:slide .22s ease-out}
+@keyframes slide{from{transform:translateX(-30px);opacity:0}}
+.drawer-head{background:var(--paper);padding:22px 24px;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:2}
+.drawer-head .x{position:absolute;left:18px;top:18px;width:36px;height:36px;border-radius:50%;background:#F1ECF3;font-size:20px}
+.drawer-head h2{font-size:22px;margin:4px 0 8px;padding-left:40px}
+.drawer-body{padding:20px 24px;display:grid;gap:16px}
+.journey{display:flex;gap:4px}
+.journey div{flex:1;height:6px;border-radius:6px;background:#E2DAE6}
+.journey div.on{background:var(--c)}
+.facts{display:grid;grid-template-columns:1fr 1fr;gap:10px 18px;font-size:14px}
+.facts span{display:block;color:var(--muted);font-size:12px}
+.desc{white-space:pre-wrap;background:#FCFAFD;border-radius:var(--r-sm);padding:12px;font-size:14px}
+.decision{background:#E3F4F0;border-radius:var(--r-md);padding:14px 16px;border:1px solid #BFE5DC}
+.decision b{color:var(--s-dec)}
+.actions{background:var(--paper);border:1.5px solid var(--plum);border-radius:var(--r-lg);padding:18px}
+.actions h3{font-size:16px;margin-bottom:12px;color:var(--plum)}
+.actions .hint{font-size:13px;color:var(--muted);margin-bottom:12px}
+.timeline{list-style:none;position:relative;padding-inline-start:22px}
+.timeline::before{content:"";position:absolute;inset-inline-start:6px;top:6px;bottom:6px;width:2px;background:var(--line)}
+.timeline li{position:relative;padding-bottom:14px;font-size:14px}
+.timeline li::before{content:"";position:absolute;inset-inline-start:-21px;top:7px;width:12px;height:12px;border-radius:50%;background:var(--c,var(--plum));border:3px solid var(--mist)}
+.timeline small{color:var(--muted);display:block;font-size:12px}
+.timeline .note{background:var(--paper);border-radius:var(--r-sm);padding:8px 11px;margin-top:5px;border:1px solid var(--line)}
+.modal-wrap{position:fixed;inset:0;background:rgba(34,24,42,.45);z-index:30;display:grid;place-items:center;padding:16px}
+.modal{background:var(--paper);width:min(560px,100%);max-height:92vh;overflow:auto;border-radius:24px;padding:24px}
+.modal h2{font-size:21px;margin-bottom:16px}
+.modal-foot{display:flex;gap:10px;justify-content:flex-start;margin-top:6px}
+
+/* ---------- employees & log ---------- */
+.people{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
+.person{background:var(--paper);border:1px solid var(--line);border-radius:var(--r-lg);padding:18px;display:grid;gap:12px}
+.person.off{opacity:.55}
+.person-top{display:flex;align-items:center;gap:12px}
+.person-top small{display:block;color:var(--muted);font-size:12px}
+.person-stats{display:flex;gap:16px;font-size:13px;color:var(--muted)}
+.person-stats b{color:var(--ink);font-size:16px;display:block}
+.person-actions{display:flex;gap:8px;flex-wrap:wrap}
+.person-actions .btn{padding:7px 14px;font-size:13px}
+.roles-note{background:var(--paper);border:1px solid var(--line);border-radius:var(--r-lg);padding:18px;margin-bottom:18px;display:grid;grid-template-columns:repeat(3,1fr);gap:16px;font-size:13px}
+.roles-note b{display:block;font-size:14px;margin-bottom:4px}
+.log{background:var(--paper);border:1px solid var(--line);border-radius:var(--r-lg);padding:6px 20px}
+.log-row{display:flex;gap:12px;align-items:flex-start;padding:12px 0;border-bottom:1px solid #F1ECF3;font-size:14px}
+.log-row:last-child{border:0}
+.log-row small{color:var(--muted);display:block;font-size:12px}
+.toast{position:fixed;bottom:24px;inset-inline-start:50%;transform:translateX(50%);background:var(--ink);color:#fff;padding:11px 20px;border-radius:40px;z-index:50;font-size:14px;animation:pop .2s}
+@keyframes pop{from{opacity:0;transform:translate(50%,10px)}}
+
+/* ---------- mobile ---------- */
+@media (max-width:900px){
+  .shell{grid-template-columns:1fr}
+  .side{position:fixed;bottom:0;top:auto;height:auto;width:100%;flex-direction:row;padding:8px;z-index:15;justify-content:space-around;gap:2px}
+  .side .brand,.side .brand-sub,.me{display:none}
+  .nav-btn{flex-direction:column;gap:2px;font-size:11px;padding:7px 4px;justify-content:center}
+  .nav-btn .count{position:absolute;margin:0;transform:translate(-14px,-6px)}
+  .nav-btn{position:relative}
+  .kpis{grid-template-columns:1fr 1fr}
+  .grid2{grid-template-columns:1fr}
+  .rail-track{grid-template-columns:repeat(5,1fr)}
+  .stop .dot{width:44px;height:44px;font-size:17px;border-width:4px}
+  .rail-track::before{top:21px}
+  .stop small{display:none}
+  .stop b{font-size:12px}
+  .roles-note{grid-template-columns:1fr}
+  .row2,.facts{grid-template-columns:1fr}
+  .top h1{font-size:25px}
+  .mobile-me{display:flex!important}
+}
+.mobile-me{display:none;align-items:center;gap:8px;font-size:13px;color:var(--muted)}
+.tabs{display:flex;background:#F1ECF3;border-radius:40px;padding:4px;margin-bottom:18px}
+.tabs button{flex:1;padding:8px;border-radius:40px;font-weight:600;font-size:14px;color:var(--muted)}
+.tabs button[aria-pressed="true"]{background:var(--paper);color:var(--plum)}
+.ok{color:var(--s-dec);font-size:13px;margin:-6px 0 12px}
+.pending-list .person{border-color:var(--rose)}
+.busy{opacity:.5;pointer-events:none}
+.linkbox{display:flex;gap:8px}.linkbox input{flex:1;direction:ltr}
+</style>
+</head>
+<body>
+<div id="app"><div class="login"><p style="color:var(--muted)">جارِ التحميل...</p></div></div>
+<div id="layer"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+/* ================= الاتصال ================= */
+const SB_URL = "https://lrsfysyczafbffeqbwgz.supabase.co";
+const SB_KEY = "sb_publishable_XDEzuLL7q7bKMvHrdXSpWA_ImAcADay";
+const sb = supabase.createClient(SB_URL, SB_KEY);
+
+/* ================= الثوابت ================= */
+const ROLES = {
+  admin:{name:"مدير النظام", desc:"يرى كل الشكاوى، ويفعّل حسابات الموظفين ويحدد أدوارهم، ويستطيع تنفيذ أي إجراء."},
+  cs:{name:"خدمة العملاء", desc:"يسجل الشكوى، ويحولها للعمليات، ويستكمل المعلومات، ويبلغ العميل بالقرار ويغلق الشكوى."},
+  ops:{name:"العمليات", desc:"يتحقق من الشكوى، ويطلب معلومات إضافية عند الحاجة، ويصدر القرار النهائي."},
+  pending:{name:"بانتظار التفعيل", desc:""}
+};
+const STAGES = [
+  {key:"new",   name:"جديدة",               owner:"cs",  color:"var(--s-new)",    hint:"عند خدمة العملاء لجمع التفاصيل"},
+  {key:"ops",   name:"قيد التحقق",           owner:"ops", color:"var(--s-ops)",    hint:"عند العمليات للتحقق"},
+  {key:"info",  name:"بحاجة لاستكمال",       owner:"cs",  color:"var(--s-info)",   hint:"العمليات طلبت معلومات إضافية"},
+  {key:"dec",   name:"بانتظار إبلاغ العميل", owner:"cs",  color:"var(--s-dec)",    hint:"صدر القرار ويجب إبلاغ العميل"},
+  {key:"closed",name:"مغلقة",                owner:null,  color:"var(--s-closed)", hint:"تم إبلاغ العميل"}
+];
+const TYPES = ["منتج تالف","منتج خاطئ","نقص في الطلب","تأخير الشحن","تحسس أو رد فعل","منتج منتهي الصلاحية","أخرى"];
+const PRIOS = ["عادية","مهمة","عاجلة"];
+const DECISIONS = ["استرداد المبلغ","استبدال المنتج","إعادة شحن الناقص","كوبون تعويض","رفض الشكوى"];
+const CHANNELS = ["واتساب","اتصال هاتفي","البريد الإلكتروني","رسائل المتجر"];
+const SLA_HOURS = 24, H = 3600e3;
+const AV_COLORS = ["#5E2A55","#D9587A","#3D6FD6","#1E8C7A","#C98A12","#7C3C70","#B4471F"];
+
+let db = {employees:[], complaints:[], log:[]}, me = null, view = "dash";
+let filters = {q:"",type:"",prio:"",mine:false};
+
+/* ================= أدوات ================= */
+const $ = s => document.querySelector(s);
+const esc = s => String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const emp = id => db.employees.find(e=>e.id===id);
+const stage = k => STAGES.find(s=>s.key===k) || STAGES[0];
+function hash(s){ let h=0; for(const ch of String(s)) h=(h*31+ch.charCodeAt(0))|0; return Math.abs(h); }
+const av = (id,cls="") => { const e=emp(id); return `<span class="avatar ${cls}" style="background:${AV_COLORS[hash(id)%AV_COLORS.length]}" title="${esc(e?e.name:"")}">${esc(e&&e.name?e.name[0]:"؟")}</span>`; };
+function ago(t){
+  const m = Math.round((Date.now()-t)/60000);
+  if(m<1) return "الآن"; if(m<60) return `منذ ${m} دقيقة`;
+  const h = Math.round(m/60); if(h<24) return `منذ ${h} ساعة`;
+  return `منذ ${Math.round(h/24)} يوم`;
+}
+const isLate = c => c.stage!=="closed" && (Date.now()-c.stageAt) > SLA_HOURS*H;
+const stageChip = k => { const s=stage(k); return `<span class="chip" style="background:color-mix(in srgb,${s.color} 14%,white);color:${s.color}"><i></i>${s.name}</span>`; };
+const can = role => me.role==="admin" || me.role===role;
+function toast(t){ const d=document.createElement("div"); d.className="toast"; d.textContent=t; document.body.appendChild(d); setTimeout(()=>d.remove(),2600); }
+function val(id){ const el=document.getElementById(id); return el?el.value.trim():""; }
+function normDigits(s){ return String(s).replace(/[٠-٩]/g,d=>"٠١٢٣٤٥٦٧٨٩".indexOf(d)).replace(/[۰-۹]/g,d=>"۰۱۲۳۴۵۶۷۸۹".indexOf(d)); }
+function leastLoaded(role){
+  const pool = db.employees.filter(e=>e.active && e.role===role);
+  if(!pool.length) return null;
+  const load = e => db.complaints.filter(c=>c.assignee===e.id && c.stage!=="closed").length;
+  return pool.sort((a,b)=>load(a)-load(b))[0].id;
+}
+const fromRow = r => ({id:r.id,customer:r.customer,phone:r.phone,order:r.order_no,type:r.type,prio:r.prio,desc:r.descr,
+  stage:r.stage,assignee:r.assignee,created:Date.parse(r.created),stageAt:Date.parse(r.stage_at),
+  decision:r.decision,satisfied:r.satisfied,history:r.history||[]});
+const icons = {
+  dash:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 13h6V4H4zM14 20h6v-9h-6zM14 4v4h6V4zM4 20h6v-3H4z"/></svg>',
+  board:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="5" height="16" rx="1.5"/><rect x="10" y="4" width="5" height="11" rx="1.5"/><rect x="17" y="4" width="4" height="7" rx="1.5"/></svg>',
+  team:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><circle cx="17" cy="9" r="2.4"/><path d="M16 14.2c2.8.3 5 2.7 5 5.8"/></svg>',
+  log:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>'
+};
+
+/* ================= تحميل البيانات ================= */
+async function refresh(){
+  const [p,c,l] = await Promise.all([
+    sb.from("profiles").select("*").order("created_at"),
+    sb.from("complaints").select("*").order("created",{ascending:false}),
+    sb.from("activity").select("*").order("t",{ascending:false}).limit(150)
+  ]);
+  if(p.error || c.error) throw (p.error || c.error);
+  db.employees = p.data; db.complaints = c.data.map(fromRow);
+  db.log = (l.data||[]).map(r=>({by:r.by,text:r.text,cid:r.cid,t:Date.parse(r.t)}));
+  const fresh = emp(me.id); if(fresh) me = fresh;
+  if(!me.active || me.role==="pending"){ renderPending(me); return false; }
+  return true;
+}
+let poll = null;
+function startPoll(){
+  clearInterval(poll);
+  poll = setInterval(async()=>{ if(document.hidden || $("#layer").innerHTML) return; try{ if(await refresh()) render(); }catch(e){} }, 20000);
+}
+document.addEventListener("visibilitychange", async()=>{ if(!document.hidden && me && !$("#layer").innerHTML){ try{ if(await refresh()) render(); }catch(e){} } });
+
+/* ================= الدخول والتسجيل ================= */
+let authMode = "in";
+function renderAuth(msg="", ok=false){
+  clearInterval(poll); me = null;
+  $("#app").innerHTML = `
+  <div class="login"><form class="login-card" onsubmit="doAuth(event)">
+    <div class="brand">مكتب الشكاوى</div>
+    <p class="sub">متجر سموث لمستحضرات التجميل</p>
+    <div class="tabs"><button type="button" aria-pressed="${authMode==="in"}" onclick="authMode='in';renderAuth()">تسجيل الدخول</button>
+      <button type="button" aria-pressed="${authMode==="up"}" onclick="authMode='up';renderAuth()">حساب جديد</button></div>
+    ${authMode==="up"?`<div class="field"><label for="an">الاسم</label><input id="an" required autocomplete="name"></div>`:""}
+    <div class="field"><label for="ae">البريد الإلكتروني</label><input id="ae" type="email" dir="ltr" required autocomplete="email"></div>
+    <div class="field"><label for="ap">كلمة السر</label><input id="ap" type="password" dir="ltr" minlength="6" required autocomplete="${authMode==="up"?"new-password":"current-password"}"></div>
+    ${msg?`<p class="${ok?"ok":"err"}">${esc(msg)}</p>`:""}
+    <button class="btn btn-primary" id="abtn" style="width:100%;justify-content:center">${authMode==="up"?"أنشئ الحساب":"دخول"}</button>
+    ${authMode==="up"?`<p style="font-size:12px;color:var(--muted);margin-top:12px">بعد إنشاء الحساب يفعّله مدير النظام ويحدد دورك.</p>`:""}
+  </form></div>`;
+}
+function authErr(m){
+  m = String(m||"");
+  if(/Invalid login/i.test(m)) return "البريد أو كلمة السر غير صحيحة.";
+  if(/already registered|already been registered/i.test(m)) return "هذا البريد مسجل بالفعل، سجّل دخول.";
+  if(/Email not confirmed/i.test(m)) return "البريد لم يُؤكَّد بعد. افتح رسالة التأكيد في بريدك ثم سجّل دخول.";
+  if(/at least 6/i.test(m)) return "كلمة السر يجب ألا تقل عن ٦ أحرف.";
+  if(/rate limit/i.test(m)) return "محاولات كثيرة، انتظر دقيقة ثم أعد المحاولة.";
+  return "تعذر الإكمال: " + m;
+}
+async function doAuth(e){
+  e.preventDefault();
+  const email = val("ae"), password = $("#ap").value, btn = $("#abtn");
+  btn.disabled = true;
+  if(authMode==="up"){
+    const {data,error} = await sb.auth.signUp({email,password,options:{data:{name:val("an")}}});
+    if(error){ btn.disabled=false; return renderAuth(authErr(error.message)); }
+    if(!data.session){ authMode="in"; return renderAuth("أنشئ الحساب. افتح رسالة التأكيد في بريدك ثم سجّل دخول.", true); }
+    return enter(data.user);
+  }
+  const {data,error} = await sb.auth.signInWithPassword({email,password});
+  if(error){ btn.disabled=false; return renderAuth(authErr(error.message)); }
+  enter(data.user);
+}
+async function enter(user){
+  const {data:p,error} = await sb.from("profiles").select("*").eq("id",user.id).maybeSingle();
+  if(error) return renderAuth("تعذر قراءة بيانات الموظف. تأكد أن كود الجداول اشتغل في سوبابيس.");
+  if(!p) return renderAuth("لم يُنشأ ملف لهذا الحساب. تأكد أن كود الجداول اشتغل قبل إنشاء الحساب.");
+  me = p;
+  if(p.role==="pending" || !p.active) return renderPending(p);
+  try{ if(!(await refresh())) return; }catch(err){ return renderAuth("تعذر تحميل الشكاوى: "+err.message); }
+  view = me.role==="admin" ? "dash" : "board"; filters.mine = me.role!=="admin";
+  render(); startPoll();
+}
+function renderPending(p){
+  clearInterval(poll);
+  $("#app").innerHTML = `<div class="login"><div class="login-card">
+    <div class="brand">أهلًا ${esc(p.name)}</div>
+    <p class="sub" style="margin-bottom:18px">${p.active?"حسابك جاهز وبانتظار أن يفعّله مدير النظام ويحدد دورك. بعد التفعيل اضغط تحديث.":"تم إيقاف حسابك. تواصل مع مدير النظام."}</p>
+    <div style="display:flex;gap:10px"><button class="btn btn-primary" onclick="recheck()">تحديث</button><button class="btn btn-ghost" onclick="logout()">خروج</button></div>
+  </div></div>`;
+}
+async function recheck(){ const {data:{user}} = await sb.auth.getUser(); user ? enter(user) : renderAuth(); }
+async function logout(){ await sb.auth.signOut(); authMode="in"; $("#layer").innerHTML=""; renderAuth(); }
+
+/* ================= الهيكل ================= */
+function render(){
+  if(!me) return renderAuth();
+  const mineOpen = db.complaints.filter(c=>c.stage!=="closed" && (stage(c.stage).owner===me.role || me.role==="admin")).length;
+  const pend = db.employees.filter(e=>e.role==="pending" && e.active).length;
+  const nav = [
+    ["dash","لوحة المتابعة",icons.dash,""],
+    ["board","الشكاوى",icons.board,mineOpen?`<span class="count">${mineOpen}</span>`:""],
+    ...(me.role==="admin"?[["team","الموظفون",icons.team,pend?`<span class="count">${pend}</span>`:""]]:[]),
+    ["log","سجل النشاط",icons.log,""]
+  ].map(([k,l,i,x])=>`<button class="nav-btn" ${view===k?'aria-current="page"':""} onclick="go('${k}')">${i}<span>${l}</span>${x}</button>`).join("");
+  $("#app").innerHTML = `
+  <div class="shell">
+    <aside class="side">
+      <div class="brand">مكتب الشكاوى</div><div class="brand-sub">متجر سموث</div>
+      ${nav}
+      <div class="me">${av(me.id)}<span><b>${esc(me.name)}</b><small>${ROLES[me.role].name}</small></span><button onclick="logout()">خروج</button></div>
+    </aside>
+    <main id="main"></main>
+  </div>`;
+  ({dash:renderDash,board:renderBoard,team:renderTeam,log:renderLog})[view]();
+}
+function go(v){ view=v; render(); window.scrollTo(0,0); }
+const topbar = (title,sub,action="") => `<div class="top"><div><h1>${title}</h1><p>${sub}</p></div><div style="display:flex;gap:10px;align-items:center">${action}<span class="mobile-me">${av(me.id,"mini")}<button class="btn btn-ghost" style="padding:6px 12px" onclick="logout()">خروج</button></span></div></div>`;
+const newBtn = () => can("cs") ? `<button class="btn btn-rose" onclick="openNew()">+ شكوى جديدة</button>` : "";
+
+/* ================= لوحة المتابعة ================= */
+function renderDash(){
+  const C = db.complaints, open = C.filter(c=>c.stage!=="closed"), closed = C.filter(c=>c.stage==="closed");
+  const late = open.filter(isLate);
+  const week = closed.filter(c=>Date.now()-c.stageAt < 7*24*H).length;
+  const avgH = closed.length ? Math.round(closed.reduce((s,c)=>s+(c.stageAt-c.created),0)/closed.length/H) : 0;
+  const rated = closed.filter(c=>typeof c.satisfied==="boolean");
+  const sat = rated.length ? Math.round(rated.filter(c=>c.satisfied).length/rated.length*100) : 0;
+  const rail = STAGES.map(s=>{ const n=C.filter(c=>c.stage===s.key).length; return `
+    <button onclick="filters.stageJump='${s.key}';go('board')"><div class="stop"><div class="dot" style="background:${s.color}">${n}</div><b>${s.name}</b><small>${s.hint}</small></div></button>`;}).join("");
+  const byType = TYPES.map(t=>[t,C.filter(c=>c.type===t).length]).filter(x=>x[1]).sort((a,b)=>b[1]-a[1]);
+  const maxT = Math.max(1,...byType.map(x=>x[1]));
+  const bars = byType.map(([t,n])=>`<div class="bar-row"><span>${t}</span><div class="bar"><div style="width:${n/maxT*100}%"></div></div><b>${n}</b></div>`).join("") || '<div class="empty">لا توجد شكاوى بعد.</div>';
+  const loads = db.employees.filter(e=>e.active && (e.role==="cs"||e.role==="ops")).map(e=>{
+    const n = open.filter(c=>c.assignee===e.id).length, l = open.filter(c=>c.assignee===e.id && isLate(c)).length;
+    return `<div class="load-row">${av(e.id)}<span><b>${esc(e.name)}</b><small>${ROLES[e.role].name}${l?` ، <span style="color:#B4361A">${l} متأخرة</span>`:""}</small></span><span class="n">${n}</span></div>`;}).join("") || '<p style="color:var(--muted);font-size:13px">لم يُفعَّل أي موظف بعد.</p>';
+  const lateList = late.length ? late.map(c=>`<button class="card" style="--c:${stage(c.stage).color}" onclick="openCase('${c.id}')"><span class="id">${c.id}</span><h3>${esc(c.customer)} ، ${esc(c.type)}</h3><div class="meta">${stageChip(c.stage)}<span class="chip late">متأخرة ${ago(c.stageAt).replace("منذ ","")}</span></div></button>`).join("") : '<div class="empty">لا توجد شكاوى متأخرة. كل المراحل داخل المهلة.</div>';
+  $("#main").innerHTML = topbar("لوحة المتابعة",`أهلًا ${esc(me.name)}، هذا وضع الشكاوى الآن.`,newBtn()) + `
+  <section class="rail"><h2>مسار الشكاوى</h2><div class="rail-track">${rail}</div></section>
+  <div class="kpis">
+    <div class="kpi"><span>مفتوحة</span><strong>${open.length}</strong></div>
+    <div class="kpi ${late.length?"warn":""}"><span>متأخرة عن ${SLA_HOURS} ساعة</span><strong>${late.length}</strong></div>
+    <div class="kpi"><span>متوسط مدة الحل</span><strong>${avgH} ساعة</strong></div>
+    <div class="kpi"><span>رضا العملاء بعد الحل</span><strong>${sat}%</strong></div>
+  </div>
+  <div class="grid2">
+    <div class="panel"><h2>تحتاج تدخل الآن</h2>${lateList}</div>
+    <div style="display:grid;gap:18px;align-content:start">
+      <div class="panel"><h2>أنواع الشكاوى</h2><div class="bars">${bars}</div></div>
+      <div class="panel"><h2>ضغط العمل على الفريق</h2>${loads}<p style="font-size:12px;color:var(--muted);margin-top:8px">أغلقت ${week} شكوى خلال آخر ٧ أيام.</p></div>
+    </div>
+  </div>`;
+}
+
+/* ================= لوحة الشكاوى ================= */
+function renderBoard(){
+  const jump = filters.stageJump; filters.stageJump = null;
+  const q = normDigits(filters.q.trim());
+  const list = db.complaints.filter(c=>
+    (!q || [c.id,c.customer,c.phone,c.order].some(v=>String(v||"").includes(q))) &&
+    (!filters.type || c.type===filters.type) && (!filters.prio || c.prio===filters.prio) &&
+    (!filters.mine || c.assignee===me.id));
+  const lanes = STAGES.map(s=>{
+    const items = list.filter(c=>c.stage===s.key).sort((a,b)=>PRIOS.indexOf(b.prio)-PRIOS.indexOf(a.prio) || a.stageAt-b.stageAt);
+    return `<section class="lane" id="lane-${s.key}"><div class="lane-head"><span class="sw" style="background:${s.color}"></span>${s.name}<span class="n">${items.length}</span></div>
+      ${items.map(c=>`<button class="card" style="--c:${s.color}" onclick="openCase('${c.id}')">
+        <span class="id">${c.id} ، طلب ${esc(c.order)}</span><h3>${esc(c.customer)}</h3>
+        <div class="meta"><span class="chip" style="background:#F1ECF3">${esc(c.type)}</span><span class="chip prio-${c.prio}">${c.prio}</span>${isLate(c)?'<span class="chip late">متأخرة</span>':""}</div>
+        <div class="foot"><span>${ago(c.stageAt)}</span>${c.assignee?av(c.assignee,"mini"):""}</div></button>`).join("") || '<p style="font-size:13px;color:var(--muted);padding:6px">لا شيء هنا.</p>'}
+    </section>`;}).join("");
+  $("#main").innerHTML = topbar("الشكاوى","كل شكوى تتحرك بين المراحل حسب دور كل موظف.",newBtn()) + `
+  <div class="toolbar">
+    <input type="search" placeholder="ابحث برقم الشكوى أو اسم العميل أو الجوال أو رقم الطلب" value="${esc(filters.q)}" oninput="filters.q=this.value;renderBoardKeep(this)">
+    <select onchange="filters.type=this.value;renderBoard()"><option value="">كل الأنواع</option>${TYPES.map(t=>`<option ${filters.type===t?"selected":""}>${t}</option>`).join("")}</select>
+    <select onchange="filters.prio=this.value;renderBoard()"><option value="">كل الأولويات</option>${PRIOS.map(t=>`<option ${filters.prio===t?"selected":""}>${t}</option>`).join("")}</select>
+    <button class="btn btn-ghost" aria-pressed="${filters.mine}" onclick="filters.mine=!filters.mine;renderBoard()" style="${filters.mine?"border-color:var(--plum);background:#F7EEF5":""}">${filters.mine?"✓ ":""}المسندة لي فقط</button>
+  </div>
+  <div class="board">${lanes}</div>`;
+  if(jump){ const el=document.getElementById("lane-"+jump); el && el.scrollIntoView({behavior:"smooth",inline:"center",block:"nearest"}); }
+}
+function renderBoardKeep(inp){ const pos=inp.selectionStart; renderBoard(); const n=document.querySelector(".toolbar input"); n.focus(); n.setSelectionRange(pos,pos); }
+
+/* ================= تفاصيل الشكوى ================= */
+let openId = null;
+const cur = () => db.complaints.find(x=>x.id===openId);
+function openCase(id){ openId=id; drawCase(); }
+function closeCase(){ openId=null; $("#layer").innerHTML=""; }
+function drawCase(){
+  const c = cur(); if(!c) return closeCase();
+  const s = stage(c.stage);
+  const order = ["new","ops","dec","closed"], pos = c.stage==="info"?1:order.indexOf(c.stage);
+  const journey = order.map((k,i)=>`<div class="${i<=pos?"on":""}" style="--c:${s.color}"></div>`).join("");
+  const timeline = c.history.slice().reverse().map(h=>`<li style="--c:${stage(h.stage).color}"><b>${esc(emp(h.by)?.name||"")}</b> ${esc(h.text)}<small>${ago(h.t)}</small>${h.note?`<div class="note">${esc(h.note)}</div>`:""}</li>`).join("");
+  const d = c.decision;
+  const dec = d ? `<div class="decision"><b>القرار: ${esc(d.type)}${d.amount?` ، ${esc(d.amount)} ريال`:""}</b><p style="font-size:14px;margin-top:4px">${esc(d.note)}</p><small style="color:var(--muted)">أصدره ${esc(emp(d.by)?.name||"")} ${ago(d.t)}</small></div>` : "";
+  $("#layer").innerHTML = `
+  <div class="scrim" onclick="if(event.target===this)closeCase()"><div class="drawer" role="dialog" aria-label="تفاصيل الشكوى">
+    <div class="drawer-head"><button class="x" onclick="closeCase()" aria-label="إغلاق">×</button>
+      <span style="font-size:13px;color:var(--muted)">${c.id} ، سجلت ${ago(c.created)}</span>
+      <h2>${esc(c.customer)}</h2>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px">${stageChip(c.stage)}<span class="chip prio-${c.prio}">${c.prio}</span>${isLate(c)?'<span class="chip late">متأخرة عن المهلة</span>':""}</div>
+      <div class="journey">${journey}</div>
+    </div>
+    <div class="drawer-body">
+      ${actionBox(c)}
+      ${dec}
+      <div class="panel"><div class="facts">
+        <div><span>الجوال</span><a href="tel:${esc(c.phone)}" style="color:inherit">${esc(c.phone)}</a></div>
+        <div><span>رقم الطلب</span>${esc(c.order)}</div>
+        <div><span>نوع الشكوى</span>${esc(c.type)}</div>
+        <div><span>المسؤول الآن</span>${esc(emp(c.assignee)?.name||"غير محدد")}</div>
+      </div><p style="font-size:12px;color:var(--muted);margin:14px 0 6px">تفاصيل الشكوى</p><div class="desc">${esc(c.desc)}</div></div>
+      <div class="panel"><h2>سجل الشكوى</h2><ul class="timeline">${timeline}</ul>
+        <div class="field" style="margin:6px 0 10px"><label for="cmt">إضافة ملاحظة داخلية</label><textarea id="cmt" placeholder="تظهر للفريق فقط"></textarea></div>
+        <button class="btn btn-ghost" onclick="addNote(this)">أضف الملاحظة</button></div>
+    </div>
+  </div></div>`;
+}
+function actionBox(c){
+  const ops = db.employees.filter(e=>e.active&&e.role==="ops"), best = leastLoaded("ops");
+  const opsOpts = ops.map(e=>`<option value="${e.id}" ${best===e.id?"selected":""}>${esc(e.name)}</option>`).join("");
+  if(c.stage==="new" && can("cs")) return `<div class="actions"><h3>تحويل للعمليات</h3><p class="hint">تأكد من رقم الطلب والصور قبل التحويل.</p>
+    ${ops.length?`<div class="field"><label for="to">موظف العمليات</label><select id="to">${opsOpts}</select></div>`:`<p class="err">لا يوجد موظف عمليات مفعّل. فعّل موظفًا بدور العمليات من صفحة الموظفين.</p>`}
+    <div class="field"><label for="an">ملاحظة للعمليات</label><textarea id="an" placeholder="مثال: العميلة أرسلت صور التلف على الواتساب"></textarea></div>
+    <button class="btn btn-primary" ${ops.length?"":"disabled"} onclick="toOps()">حوّل للعمليات</button></div>`;
+  if(c.stage==="info" && can("cs")) return `<div class="actions"><h3>استكمال المعلومات</h3><p class="hint">العمليات طلبت معلومات إضافية، راجع آخر ملاحظة في السجل.</p>
+    <div class="field"><label for="an">المعلومات المطلوبة</label><textarea id="an"></textarea></div>
+    <button class="btn btn-primary" onclick="backToOps()">أعد للعمليات</button></div>`;
+  if(c.stage==="ops" && can("ops")) return `<div class="actions"><h3>إصدار القرار</h3>
+    <div class="row2"><div class="field"><label for="dt">القرار</label><select id="dt">${DECISIONS.map(d=>`<option>${d}</option>`).join("")}</select></div>
+    <div class="field"><label for="da">المبلغ بالريال إن وجد</label><input id="da" inputmode="decimal"></div></div>
+    <div class="field"><label for="an">تفاصيل القرار لخدمة العملاء</label><textarea id="an" placeholder="ما الذي سيبلّغ به العميل بالضبط"></textarea></div>
+    <div id="aerr"></div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn btn-primary" onclick="decide()">أصدر القرار</button><button class="btn btn-ghost" onclick="askInfo()">اطلب معلومات إضافية</button></div></div>`;
+  if(c.stage==="dec" && can("cs")) return `<div class="actions"><h3>إبلاغ العميل وإغلاق الشكوى</h3>
+    <div class="row2"><div class="field"><label for="ch">وسيلة الإبلاغ</label><select id="ch">${CHANNELS.map(d=>`<option>${d}</option>`).join("")}</select></div>
+    <div class="field"><label for="sat">رد العميل</label><select id="sat"><option value="1">راضٍ</option><option value="0">غير راضٍ</option></select></div></div>
+    <div class="field"><label for="an">ملاحظة</label><textarea id="an"></textarea></div>
+    <button class="btn btn-primary" onclick="closeComplaint()">أبلغت العميل، أغلق الشكوى</button></div>`;
+  if(c.stage==="closed") return "";
+  return `<div class="actions" style="border-color:var(--line)"><p class="hint" style="margin:0">الإجراء الآن عند فريق ${ROLES[stage(c.stage).owner].name}.</p></div>`;
+}
+function busy(on){ const d=$(".drawer"); d && d.classList.toggle("busy",on); }
+async function move(c,to,text,note,assignee,extra={}){
+  busy(true);
+  try{
+    const {data:fresh,error} = await sb.from("complaints").select("history,stage").eq("id",c.id).single();
+    if(error) throw error;
+    if(fresh.stage!==c.stage){ await refresh(); drawCase(); render(); toast("الشكوى تغيرت من موظف آخر، تم تحديثها"); return; }
+    const history = [...(fresh.history||[]), {by:me.id,text,t:Date.now(),stage:to,note:note||""}];
+    const patch = Object.assign({stage:to,stage_at:new Date().toISOString(),history}, extra);
+    if(assignee) patch.assignee = assignee;
+    const {error:e2} = await sb.from("complaints").update(patch).eq("id",c.id);
+    if(e2) throw e2;
+    await sb.from("activity").insert({by:me.id,text,cid:c.id});
+    await refresh(); drawCase(); render(); toast(text);
+  }catch(err){ busy(false); toast("لم يُحفظ الإجراء: "+err.message); }
+}
+const firstCS = c => { const h=c.history.find(x=>x.stage==="new"); const e=h&&emp(h.by); return e&&e.active&&(e.role==="cs"||e.role==="admin") ? e.id : leastLoaded("cs"); };
+function toOps(){ const c=cur(); move(c,"ops","حوّل الشكوى للعمليات",val("an"),val("to")||leastLoaded("ops")); }
+function backToOps(){ const c=cur(); const b=[...c.history].reverse().find(h=>h.stage==="info"); move(c,"ops","أعاد الشكوى للعمليات بعد الاستكمال",val("an"),(b&&emp(b.by)?.active)?b.by:leastLoaded("ops")); }
+function decide(){
+  const c=cur(), note=val("an");
+  if(!note){ $("#aerr").innerHTML='<p class="err">اكتب تفاصيل القرار حتى تعرف خدمة العملاء ماذا تقول للعميل.</p>'; return; }
+  move(c,"dec","أصدر القرار: "+val("dt"),note,firstCS(c),{decision:{type:val("dt"),amount:normDigits(val("da")),note,by:me.id,t:Date.now()}});
+}
+function askInfo(){
+  const c=cur(), note=val("an");
+  if(!note){ $("#aerr").innerHTML='<p class="err">اكتب المعلومات المطلوبة في خانة التفاصيل.</p>'; return; }
+  move(c,"info","طلب معلومات إضافية",note,firstCS(c));
+}
+function closeComplaint(){ const c=cur(), s=val("sat")==="1"; move(c,"closed","أبلغ العميل عبر "+val("ch")+" وأغلق الشكوى",(s?"العميل راضٍ. ":"العميل غير راضٍ. ")+val("an"),null,{satisfied:s}); }
+async function addNote(btn){
+  const c=cur(), t=val("cmt"); if(!t) return;
+  btn.disabled = true;
+  const {data:fresh,error} = await sb.from("complaints").select("history").eq("id",c.id).single();
+  if(error){ btn.disabled=false; return toast("لم تُحفظ الملاحظة: "+error.message); }
+  const history = [...(fresh.history||[]), {by:me.id,text:"أضاف ملاحظة",t:Date.now(),stage:c.stage,note:t}];
+  const {error:e2} = await sb.from("complaints").update({history}).eq("id",c.id);
+  if(e2){ btn.disabled=false; return toast("لم تُحفظ الملاحظة: "+e2.message); }
+  await sb.from("activity").insert({by:me.id,text:"أضاف ملاحظة",cid:c.id});
+  await refresh(); drawCase(); toast("أضيفت الملاحظة");
+}
+
+/* ================= شكوى جديدة ================= */
+function openNew(){
+  $("#layer").innerHTML = `<div class="modal-wrap" onclick="if(event.target===this)this.remove()"><form class="modal" onsubmit="createCase(event)">
+    <h2>تسجيل شكوى جديدة</h2>
+    <div class="row2"><div class="field"><label for="nc">اسم العميل</label><input id="nc" required></div>
+    <div class="field"><label for="np">رقم الجوال</label><input id="np" inputmode="tel" placeholder="05xxxxxxxx" required></div></div>
+    <div class="row2"><div class="field"><label for="no">رقم الطلب</label><input id="no" required></div>
+    <div class="field"><label for="nt">نوع الشكوى</label><select id="nt">${TYPES.map(t=>`<option>${t}</option>`).join("")}</select></div></div>
+    <div class="field"><label for="npr">الأولوية</label><select id="npr">${PRIOS.map(t=>`<option>${t}</option>`).join("")}</select></div>
+    <div class="field"><label for="nd">تفاصيل الشكوى</label><textarea id="nd" placeholder="ماذا حدث، ومتى، وهل أرسل العميل صورًا" required></textarea></div>
+    <div id="nerr"></div>
+    <div class="modal-foot"><button class="btn btn-primary" id="nbtn">سجّل الشكوى</button><button type="button" class="btn btn-ghost" onclick="$('#layer').innerHTML=''">إلغاء</button></div>
+  </form></div>`;
+  setTimeout(()=>$("#nc").focus(),50);
+}
+async function createCase(e){
+  e.preventDefault();
+  const phone = normDigits(val("np")).replace(/\D/g,"");
+  if(!/^05\d{8}$/.test(phone)){ $("#nerr").innerHTML='<p class="err">رقم الجوال يجب أن يبدأ بـ 05 ويتكون من ١٠ أرقام.</p>'; return; }
+  const btn=$("#nbtn"); btn.disabled=true;
+  try{
+    const {data:id,error} = await sb.rpc("next_complaint_id"); if(error) throw error;
+    const now = new Date().toISOString();
+    const row = {id,customer:val("nc"),phone,order_no:normDigits(val("no")),type:val("nt"),prio:val("npr"),descr:val("nd"),
+      stage:"new",assignee:me.role==="cs"?me.id:(leastLoaded("cs")||me.id),created:now,stage_at:now,
+      history:[{by:me.id,text:"سجل الشكوى",t:Date.now(),stage:"new",note:""}]};
+    const {error:e2} = await sb.from("complaints").insert(row); if(e2) throw e2;
+    await sb.from("activity").insert({by:me.id,text:"سجل الشكوى",cid:id});
+    await refresh(); $("#layer").innerHTML=""; toast("سُجلت الشكوى "+id); view="board"; render(); openCase(id);
+  }catch(err){ btn.disabled=false; $("#nerr").innerHTML=`<p class="err">لم تُسجل الشكوى: ${esc(err.message)}</p>`; }
+}
+
+/* ================= الموظفون ================= */
+function renderTeam(){
+  const pend = db.employees.filter(e=>e.role==="pending" && e.active);
+  const team = db.employees.filter(e=>!(e.role==="pending" && e.active));
+  const pendHtml = pend.length ? `<h2 style="font-size:18px;margin-bottom:12px">بانتظار التفعيل</h2><div class="people pending-list" style="margin-bottom:24px">${pend.map(e=>`
+    <div class="person"><div class="person-top">${av(e.id)}<span><b>${esc(e.name)}</b><small>أنشأ حسابه ${ago(Date.parse(e.created_at))}</small></span></div>
+      <div class="field" style="margin:0"><label for="pr-${e.id}">الدور</label><select id="pr-${e.id}"><option value="cs">خدمة العملاء</option><option value="ops">العمليات</option><option value="admin">مدير النظام</option></select></div>
+      <div class="person-actions"><button class="btn btn-primary" onclick="activate('${e.id}')">فعّل الحساب</button><button class="btn btn-ghost" onclick="setEmp('${e.id}',{active:false},'رفض حساب')">رفض</button></div></div>`).join("")}</div>` : "";
+  const cards = team.map(e=>{
+    const open = db.complaints.filter(c=>c.assignee===e.id&&c.stage!=="closed").length;
+    const done = db.complaints.filter(c=>c.history.some(h=>h.by===e.id&&(h.stage==="closed"||h.stage==="dec"))).length;
+    return `<div class="person ${e.active?"":"off"}">
+      <div class="person-top">${av(e.id)}<span><b>${esc(e.name)}</b><small>${ROLES[e.role].name}${e.active?"":" ، موقوف"}</small></span></div>
+      <div class="person-stats"><span><b>${open}</b>مفتوحة لديه</span><span><b>${done}</b>قرارات وإغلاقات</span></div>
+      <div class="person-actions"><button class="btn btn-ghost" onclick="openEmp('${e.id}')">تعديل</button>
+      ${e.id!==me.id?`<button class="btn btn-ghost" onclick="setEmp('${e.id}',{active:${!e.active}},'${e.active?"أوقف حساب":"فعّل حساب"}')">${e.active?"إيقاف الحساب":"تفعيل الحساب"}</button>`:""}</div></div>`;}).join("");
+  const roles = ["admin","cs","ops"].map(k=>`<div><b>${ROLES[k].name}</b>${ROLES[k].desc}</div>`).join("");
+  $("#main").innerHTML = topbar("الموظفون","كل موظف ينشئ حسابه من رابط النظام، وأنت تفعّله وتحدد دوره.",`<button class="btn btn-rose" onclick="openInvite()">+ إضافة موظف</button>`) +
+    pendHtml + `<div class="roles-note">${roles}</div><div class="people">${cards}</div>`;
+}
+function openInvite(){
+  const link = location.href.split("#")[0];
+  $("#layer").innerHTML = `<div class="modal-wrap" onclick="if(event.target===this)this.remove()"><div class="modal">
+    <h2>إضافة موظف</h2>
+    <p style="margin-bottom:14px">أرسل الرابط للموظف، يفتحه ويختار حساب جديد ويسجل باسمه وبريده. بعدها يظهر عندك في قسم بانتظار التفعيل، فتختار دوره وتفعّله.</p>
+    <div class="linkbox"><input id="lnk" readonly value="${esc(link)}"><button class="btn btn-primary" onclick="copyLink()">انسخ</button></div>
+    <div class="modal-foot" style="margin-top:16px"><a class="btn btn-ghost" target="_blank" href="https://wa.me/?text=${encodeURIComponent("رابط نظام شكاوى سموث، أنشئ حسابك من هنا: "+link)}">أرسل على واتساب</a><button class="btn btn-ghost" onclick="$('#layer').innerHTML=''">إغلاق</button></div>
+  </div></div>`;
+}
+function copyLink(){ const i=$("#lnk"); i.select(); (navigator.clipboard?navigator.clipboard.writeText(i.value):Promise.reject()).then(()=>toast("نُسخ الرابط")).catch(()=>{document.execCommand("copy");toast("نُسخ الرابط");}); }
+async function setEmp(id,patch,label){
+  const {error} = await sb.from("profiles").update(patch).eq("id",id);
+  if(error) return toast("لم يُحفظ: "+error.message);
+  const e = emp(id); await sb.from("activity").insert({by:me.id,text:label+" "+(e?e.name:""),cid:null});
+  await refresh(); $("#layer").innerHTML=""; render(); toast("تم الحفظ");
+}
+function activate(id){ const r=val("pr-"+id); setEmp(id,{role:r,active:true},"فعّل حساب"); }
+function openEmp(id){
+  const e = emp(id);
+  $("#layer").innerHTML = `<div class="modal-wrap" onclick="if(event.target===this)this.remove()"><form class="modal" onsubmit="saveEmp(event,'${id}')">
+    <h2>تعديل بيانات الموظف</h2>
+    <div class="field"><label for="en">الاسم</label><input id="en" value="${esc(e.name)}" required></div>
+    <div class="field"><label for="er">الدور</label><select id="er" ${id===me.id?"disabled":""}>${["cs","ops","admin"].map(k=>`<option value="${k}" ${e.role===k?"selected":""}>${ROLES[k].name}</option>`).join("")}</select></div>
+    <div class="field"><label for="ep">الجوال</label><input id="ep" inputmode="tel" value="${esc(e.phone||"")}"></div>
+    <div class="modal-foot"><button class="btn btn-primary">احفظ التعديل</button><button type="button" class="btn btn-ghost" onclick="$('#layer').innerHTML=''">إلغاء</button></div>
+  </form></div>`;
+}
+function saveEmp(ev,id){
+  ev.preventDefault();
+  const patch = {name:val("en"),phone:normDigits(val("ep"))};
+  if(id!==me.id) patch.role = val("er");
+  setEmp(id,patch,"عدّل بيانات");
+}
+
+/* ================= سجل النشاط ================= */
+function renderLog(){
+  const rows = db.log.slice(0,80).map(r=>`<div class="log-row">${av(r.by,"mini")}<span><b>${esc(emp(r.by)?.name||"")}</b> ${esc(r.text)} ${r.cid?`<button style="color:var(--plum);font-weight:600" onclick="openCase('${r.cid}')">${r.cid}</button>`:""}<small>${ago(r.t)}</small></span></div>`).join("");
+  $("#main").innerHTML = topbar("سجل النشاط","كل إجراء في النظام باسم الموظف ووقته.") + `<div class="log">${rows||'<div class="empty">لا يوجد نشاط بعد.</div>'}</div>`;
+}
+
+/* ================= تشغيل ================= */
+document.addEventListener("keydown",e=>{ if(e.key==="Escape"){ $("#layer").innerHTML=""; openId=null; } });
+(async()=>{
+  const {data:{session}} = await sb.auth.getSession();
+  session ? enter(session.user) : renderAuth();
+})();
+</script>
+</body>
+</html>
